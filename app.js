@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { errors } = require('celebrate');
+const helmet = require('helmet');
 const routes = require('./routes/index');
 const errorMiddlewares = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -12,7 +13,7 @@ const PORT = process.env.PORT || 4000;
 
 const app = express();
 
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
 }).then(() => {
   console.log('db connected');
 });
@@ -45,6 +46,7 @@ app.use((req, res, next) => {
   return next();
 });
 
+app.use(helmet());
 app.use(cors());
 app.use(requestLogger);
 app.get('/crash-test', () => {

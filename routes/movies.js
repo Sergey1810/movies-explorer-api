@@ -5,11 +5,11 @@ const {
   deleteMovieById,
 } = require('../controllers/movies');
 const { auth } = require('../middlewares/auth');
-const { idIsValid, cardIsValid } = require('../validations/validation');
+const { idIsValid, movieIsValid } = require('../validations/validation');
 
 router.get('/', auth, getMovies);
 
-router.post('/', auth, cardIsValid, createMovie);
+router.post('/', auth, movieIsValid, createMovie);
 
 router.delete('/:id', auth, idIsValid, deleteMovieById);
 
