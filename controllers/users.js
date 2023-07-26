@@ -35,8 +35,6 @@ const createUser = (req, res, next) => {
     email,
     password,
     name,
-    about,
-    avatar,
   } = req.body;
   if (!email || !password) {
     throw new BadRequestError('Не передан email или пароль');
@@ -53,8 +51,6 @@ const createUser = (req, res, next) => {
           email,
           password: hash,
           name,
-          about,
-          avatar,
         })
           .then((users) => res.status(201).send(users)),
       );
@@ -89,13 +85,13 @@ const login = (req, res, next) => {
         const token = generateToken(user._id);
         return res.status(200).send({ token });
       });
-      return next();
+      return null;
     })
     .catch((e) => {
       userBadRequestError(e, res);
       return next(e);
     });
-  return next();
+  return null;
 };
 
 module.exports = {

@@ -5,11 +5,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const rateLimit = require('express-rate-limit');
 const routes = require('./routes/index');
 const errorMiddlewares = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -48,6 +50,12 @@ app.use((req, res, next) => {
 
 app.use(helmet());
 app.use(cors());
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+}));
 app.use(requestLogger);
 app.get('/crash-test', () => {
   setTimeout(() => {

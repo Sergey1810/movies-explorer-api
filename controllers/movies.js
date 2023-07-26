@@ -6,7 +6,7 @@ const NotFoundError = require('../errors/not-found-error');
 
 const cardsBadRequestError = (e, res, next) => {
   if (e.name === 'ValidationError') {
-    next(new BadRequestError('Переданы некорректные данные при создании карточки.'));
+    next(new BadRequestError('Переданы некорректные данные при создании фильма.'));
   } if (e.name === 'CastError') {
     next(new BadRequestError('Карточка с указанным id не найдена.'));
   }
@@ -35,7 +35,7 @@ const deleteMovieById = (req, res, next) => {
   Movie.findById(id)
     .then((movie) => {
       if (!movie) {
-        next(new NotFoundError('Переданы некорректные данные при удалении карточки.'));
+        next(new NotFoundError('Переданы некорректные данные при удалении фильма.'));
       }
       if (movie.owner.toString() === owner) {
         return Movie.findByIdAndRemove(movie.id)
@@ -43,7 +43,7 @@ const deleteMovieById = (req, res, next) => {
             res.status(200).send({ data: movieRemove });
           });
       }
-      return next(new ForbiddenError('Переданы некорректные данные при удалении карточки.'));
+      return next(new ForbiddenError('Переданы некорректные данные при удалении фильма.'));
     })
     .catch(next);
 };
