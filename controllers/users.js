@@ -60,22 +60,17 @@ const createUser = (req, res, next) => {
 
 const updateUserById = (req, res, next) => {
   const { id } = req.user;
-  const {
-    email,
-    name,
-  } = req.body;
-  return User.findOne({ email })
+  const updateUser = req.body;
+  return User.findByIdAndUpdate(id, updateUser, { new: true })
     .then((user) => {
-      if (user) {
-        throw new ConflictError('Пользователь уже существует');
-      }
-      return User.findByIdAndUpdate(id, { email, name }, { new: true })
-        .then((newUser) => {
-          res.status(200).send(newUser);
-        })
-        .catch((e) => next(e));
+      res.status(200).send(user);
     })
-    .catch((e) => next(e));
+    .catch((e) => {
+      if (e.name === 'MongoServerError') {
+        next(new ConflictError('Пользователь с таким email уже существует'));
+      }
+      next(e);
+    });
 };
 
 const login = (req, res, next) => {
