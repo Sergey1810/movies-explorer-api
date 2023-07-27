@@ -13,11 +13,14 @@ const cardsBadRequestError = (e, res, next) => {
   next(new InternalServerError('На сервере произошла ошибка'));
 };
 
-const getMovies = (req, res, next) => Movie.find({})
-  .then((movies) => res.status(200).send(movies))
-  .catch((e) => {
-    cardsBadRequestError(e, res, next);
-  });
+const getMovies = (req, res, next) => {
+  const owner = req.user.id;
+  Movie.find({ owner })
+    .then((movies) => res.status(200).send(movies))
+    .catch((e) => {
+      cardsBadRequestError(e, res, next);
+    });
+};
 
 const createMovie = (req, res, next) => {
   const owner = req.user.id;

@@ -5,17 +5,17 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const { errors } = require('celebrate');
 const helmet = require('helmet');
-// eslint-disable-next-line import/no-extraneous-dependencies
-const rateLimit = require('express-rate-limit');
+const rateLimit = require('./middlewares/rateLimit');
 const routes = require('./routes/index');
 const errorMiddlewares = require('./middlewares/errors');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const PORT = process.env.PORT || 3000;
+const { NODE_ENV, DB } = process.env;
 
 const app = express();
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb', {
+mongoose.connect(NODE_ENV === 'production' ? DB : 'mongodb://127.0.0.1:27017/bitfilmsdb', {
 }).then(() => {
   console.log('db connected');
 });
@@ -50,12 +50,7 @@ app.use((req, res, next) => {
 
 app.use(helmet());
 app.use(cors());
-app.use(rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-  standardHeaders: true,
-  legacyHeaders: false,
-}));
+app.use(rateLimit);
 app.use(requestLogger);
 app.get('/crash-test', () => {
   setTimeout(() => {

@@ -4,9 +4,10 @@ const movieRoutes = require('./movies');
 const { login, createUser } = require('../controllers/users');
 const NotFoundError = require('../errors/not-found-error');
 const { loginIsValid, userIsValid } = require('../validations/validation');
+const { auth } = require('../middlewares/auth');
 
-router.post('/signin', loginIsValid, login);
-router.post('/signup', userIsValid, createUser);
+router.post('/signin', loginIsValid, auth, login);
+router.post('/signup', userIsValid, auth, createUser);
 router.use('/users', userRoutes);
 router.use('/movies', movieRoutes);
 router.use('*', (req, res, next) => {

@@ -52,7 +52,7 @@ const createUser = (req, res, next) => {
           password: hash,
           name,
         })
-          .then((users) => res.status(201).send(users)),
+          .then((users) => res.status(201).send({ name: users.name, email: users.email })),
       );
     })
     .catch(next);
@@ -60,12 +60,22 @@ const createUser = (req, res, next) => {
 
 const updateUserById = (req, res, next) => {
   const { id } = req.user;
-  const updateUser = req.body;
-  return User.findByIdAndUpdate(id, updateUser, { new: true })
+  const {
+    email,
+    name,
+  } = req.body;
+  return User.findOne({ email })
     .then((user) => {
-      res.status(200).send(user);
+      if (user) {
+        throw new ConflictError('Пользователь уже существует');
+      }
+      return User.findByIdAndUpdate(id, { email, name }, { new: true })
+        .then((newUser) => {
+          res.status(200).send(newUser);
+        })
+        .catch((e) => next(e));
     })
-    .catch(next);
+    .catch((e) => next(e));
 };
 
 const login = (req, res, next) => {
