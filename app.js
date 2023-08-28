@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 const allowedCors = [
   'http://li.movies.nomoredomainsicu.ru',
   'https://li.movies.nomoredomainsicu.ru',
-  'https://sergeyback.nomoredomains.xyz',
+  '*',
   'http://sergeyback.nomoredomains.xyz',
 ];
 
