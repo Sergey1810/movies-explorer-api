@@ -23,8 +23,8 @@ mongoose.connect(NODE_ENV === 'production' ? DB : 'mongodb://127.0.0.1:27017/bit
 app.use(bodyParser.json());
 
 const allowedCors = [
-  'https://sergey.nomoredomains.xyz',
-  'http://sergey.nomoredomains.xyz',
+  'http://li.movies.nomoredomainsicu.ru',
+  'https://li.movies.nomoredomainsicu.ru',
   'https://sergeyback.nomoredomains.xyz',
   'http://sergeyback.nomoredomains.xyz',
 ];
