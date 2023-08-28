@@ -26,7 +26,7 @@ const allowedCors = [
   'http://li.movies.nomoredomainsicu.ru',
   'https://li.movies.nomoredomainsicu.ru',
   '*',
-  'http://sergeyback.nomoredomains.xyz',
+  'http://localhost:3000',
 ];
 
 app.use((req, res, next) => {
