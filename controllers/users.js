@@ -44,16 +44,11 @@ const createUser = (req, res, next) => {
       if (user) {
         throw new ConflictError('Пользователь уже существует');
       }
-      bcrypt.hash(
-        password,
-        10,
-        (err, hash) => User.create({
-          email,
-          password: hash,
-          name,
-        })
-          .then((users) => res.status(201).send({ name: users.name, email: users.email })),
-      );
+      bcrypt.hash(password, 10, (err, hash) => User.create({ email, password: hash, name })
+        .then((users) => {
+          const token = generateToken(user._id);
+          res.status(201).send({ name: users.name, email: users.email, token });
+        }));
     })
     .catch(next);
 };
